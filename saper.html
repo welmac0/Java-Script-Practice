@@ -107,46 +107,6 @@
 </body>
 
 <script defer>
-    Powitanie()
-    function Powitanie() {
-        nick = prompt("Wpisz nick!")
-    }
-
-    //Formularz()
-
-    function Formularz() {
-        //dynamiczne tworzenie menu
-        console.log("chejka");
-        `
-        <div class="center">
-            <form id="form">
-                <label for="cols">Rows: </label>
-                <input type="number" id="cols" name="cols" class="input_text"><br>
-                <label for="rows">Height: </label>
-                <input type="number" id="rows" name="rows" class="input_text"><br>
-                <label for="mines">Mines: </label>
-                <input type="number" id="mines" name="mines" class="input_text"><br>
-            </form>
-            <button class="btn" id="play-button">Play</button> <br>
-            Pozostało bomb: <b id="bomby"></b> <br>
-            Grasz: <b id="czas"></b>[s] <br>
-        </div>`
-        let Pierwszy = document.getElementById("Pierwszy")
-        let Center = document.createElement("div")
-        Center.setAttribute("class", "center")
-        Pierwszy.appendChild(Center)
-        let form = document.createElement("form")
-        let lcols = document.createElement("label")
-        lcols.setAttribute("for", "cols")
-        lcols.innerText += "Rows:"
-        let icols = document.createElement("input")
-        icols.setAttribute("type", "number")
-        icols.setAttribute("id", "rows")
-        icols.setAttribute("name", "cols")
-        icols.setAttribute("class", "input_text")
-        form.appendChild(lcols)
-        form.appendChild(icols)
-    }
 
     function PobierzDate() {
         DataStartu = new Date()
