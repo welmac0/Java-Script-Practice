@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saper raw</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: 'Henny Penny', cursive;
+        }
+
+        .center {
+            margin: auto;
+            width: 30%;
+            padding: 10px;
+            text-align: center;
+            border-radius: 15px;
+            background: rgb(19, 1, 57);
+            background: linear-gradient(90deg, rgba(19, 1, 57, 1) 0%, rgba(53, 9, 121, 0.9206057422969187) 41%, rgba(190, 0, 255, 1) 100%);
+            color: white;
+            /* Center Div */
+        }
+
+        .drugi {
+            margin: auto;
+            padding: 10px;
+            width: 50%;
+            text-align: center;
+            /* Second Div */
+        }
+
+        .input_text {
+            width: 30px;
+            margin: auto;
+        }
+
+        .btn {
+            padding: 10px 10px;
+            font-size: 20px;
+            font-family: 'Henny Penny'
+                /* Button */
+        }
+
+
+        td {
+            margin: 0;
+            padding: 0;
+            border: solid 1px;
+            height: 20px;
+            width: 20px;
+            font-size: 10px;
+            /* Table cells spacing */
+        }
+
+        td img {
+            display: block;
+            width: 20px;
+            height: 20px;
+            /* Images in table cells */
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            background-color: gray;
+            /* Removes the cell spacing via CSS */
+        }
+    </style>
+
+
+</head>
+
+<body id="body">
+
+    <br> <!-- First div/menu -->
+    <div id="Pierwszy">
+        <div class="center">
+            <form id="form">
+                <label for="cols">Rows: </label>
+                <input type="text" id="cols" name="cols" class="input_text"><br>
+                <label for="rows">Height: </label>
+                <input type="text" id="rows" name="rows" class="input_text"><br>
+                <label for="mines">Mines: </label>
+                <input type="text" id="mines" name="mines" class="input_text"><br>
+            </form>
+            <button class="btn" id="play-button">Play</button> <br>
+            Pozostało bomb: <b id="bomby"></b> <br>
+            Grasz: <b id="czas"></b>[s] <br>
+        </div>
+    </div>
+    <br>
+    <!-- Plansza -->
+    <div id="Drugi" class="center">
+
+    </div>
+</body>
+
+<script defer>
+    Powitanie()
+    function Powitanie() {
+        nick = prompt("Wpisz nick!")
+    }
+
+    //Formularz()
+
+    function Formularz() {
+        //dynamiczne tworzenie menu
+        console.log("chejka");
+        `
+        <div class="center">
+            <form id="form">
+                <label for="cols">Rows: </label>
+                <input type="number" id="cols" name="cols" class="input_text"><br>
+                <label for="rows">Height: </label>
+                <input type="number" id="rows" name="rows" class="input_text"><br>
+                <label for="mines">Mines: </label>
+                <input type="number" id="mines" name="mines" class="input_text"><br>
+            </form>
+            <button class="btn" id="play-button">Play</button> <br>
+            Pozostało bomb: <b id="bomby"></b> <br>
+            Grasz: <b id="czas"></b>[s] <br>
+        </div>`
+        let Pierwszy = document.getElementById("Pierwszy")
+        let Center = document.createElement("div")
+        Center.setAttribute("class", "center")
+        Pierwszy.appendChild(Center)
+        let form = document.createElement("form")
+        let lcols = document.createElement("label")
+        lcols.setAttribute("for", "cols")
+        lcols.innerText += "Rows:"
+        let icols = document.createElement("input")
+        icols.setAttribute("type", "number")
+        icols.setAttribute("id", "rows")
+        icols.setAttribute("name", "cols")
+        icols.setAttribute("class", "input_text")
+        form.appendChild(lcols)
+        form.appendChild(icols)
+    }
+
+    function PobierzDate() {
+        DataStartu = new Date()
+        console.log("Data startu: " + DataStartu);
+    }
+
+    function PobierzDate2() {
+        DataKonca = new Date()
+        s2 = DataKonca - DataStartu
+        s2 = s2 / 1000
+    }
+
+    document.getElementById("play-button").onclick = function () { Zapisanie(); Time(); Tablica2D(); TableMaker(); PobierzDate() }
+    const playbutton = document.querySelector('#play-button');
+
+    const disableButton = () => {
+        console.log("play button has been turned off");
+        playbutton.disabled = true;
+    }
+
+    playbutton.addEventListener('click', disableButton);
+
+    //funkcje:
+    function Zapisanie() {
+        cols = document.getElementById("form").elements["cols"].value
+        rows = document.getElementById("form").elements["rows"].value
+        mine = document.getElementById("form").elements["mines"].value // zapisanie wartosci
+        let maxmine = cols * rows - cols;
+        /*if (typeof (cols) != 'number' || typeof (rows) != 'number' || typeof (mine) != 'number') {
+            alert("Wpisane zle numery, sprobuj ponownie!")
+            window.location.reload()
+        }*/
+        console.log(typeof (cols));
+        console.log(cols)
+        console.log(rows)
+        console.log(mine)
+        wolne = cols * rows - mine;
+        odkryte = 0
+        console.log("wolne: " + wolne);
+    }
+
+    function Time() {
+        s1 = 0;
+        console.log("CZAS")
+        setInterval(function () {
+            s1 += 1;
+            document.getElementById("czas").innerHTML = s1 // dlugosc gry
+        }, 1000);
+    }
+
+    function Tablica2D() {
+        Tablica = [];
+        for (let i = 0; i < cols; i++) {
+            Tablica[i] = []
+            for (let j = 0; j < rows; j++) {
+                Tablica[i][j] = 0
+            }
+        }
+        // bomby = 9, brak bomb = 0
+        const x = []
+        const y = []
+        let l = 0
+        while (l < mine) {
+            x[l] = Math.floor(Math.random() * rows)
+            y[l] = Math.floor(Math.random() * cols)
+            if (Tablica[x[l]][y[l]] != 9) {
+                Tablica[x[l]][y[l]] = 9;
+                l++;
+            }
+        }
+        // i - kolumny 
+        // j - wiersze
+        for (let i = 0; i < cols; i++) {
+            for (let j = 0; j < rows; j++) {
+                console.log("chooooj")
+                if (Tablica[i][j] == 9) {
+                    Change(i, j); //zamiana jedynek i dwojek
+                }
+            }
+        }
+
+        console.table(Tablica)
+    }
+
+    function Change(i, j) {
+        //if (i > 0 && j > 0 && i < cols && j < rows) {
+        if (Tablica[i - 1]?.[j] != 9 && Tablica[i - 1]?.[j] != null) {
+            Tablica[i - 1][j] += 1
+        }
+        if (Tablica[i + 1]?.[j] != 9 && Tablica[i + 1]?.[j] != null) {
+            Tablica[i + 1][j] += 1
+        }
+        if (Tablica[i - 1]?.[j + 1] != 9 && Tablica[i - 1]?.[j + 1] != null) {
+            Tablica[i - 1][j + 1] += 1
+        }
+        if (Tablica[i + 1]?.[j + 1] != 9 && Tablica[i + 1]?.[j + 1] != null) {
+            Tablica[i + 1][j + 1] += 1
+        }
+        if (Tablica[i - 1]?.[j - 1] != 9 && Tablica[i - 1]?.[j - 1] != null) {
+            Tablica[i - 1][j - 1] += 1
+        }
+        if (Tablica[i + 1]?.[j - 1] != 9 && Tablica[i + 1]?.[j - 1] != null) {
+            Tablica[i + 1][j - 1] += 1
+        }
+        if (Tablica[i]?.[j + 1] != 9 && Tablica[i]?.[j + 1] != null) {
+            Tablica[i][j + 1] += 1
+        }
+        if (Tablica[i]?.[j - 1] != 9 && Tablica[i]?.[j - 1] != null) {
+            Tablica[i][j - 1] += 1
+        }
+        //}
+    }
+
+    function TableMaker() { //tworzenie wizualnie tabeli
+        let Drugi = document.getElementById("Drugi")
+
+        let Plansza = document.createElement("table")
+        //Plansza.setAttribute("border", "1")
+        Plansza.setAttribute("style", "margin: auto;")
+
+        for (let i = 0; i < rows; i++) {
+            let rzad = document.createElement("tr")
+
+            for (let j = 0; j < cols; j++) {
+                let punkt = document.createElement("td")
+                let IDpunktu = `${i}:${j}`
+                punkt.setAttribute("id", IDpunktu)
+
+
+                let obrazek = document.createElement("img")
+                obrazek.setAttribute("src", "./imgz4/klepa.PNG")
+                let IDobrazku = `${i}a:${j}a`
+                obrazek.setAttribute("id", IDobrazku)
+
+                obrazek.setAttribute("height", 20)
+                obrazek.setAttribute("width", 20)
+                punkt.appendChild(obrazek)
+
+                rzad.appendChild(punkt)
+
+                punkt.onclick = function (event) {
+                    let id = punkt.id
+                    console.log("linijka 248, gdzie id: " + id); //X:Y
+                    let tabId = [];
+                    //for (let i = 0; i < 3; i++) {
+                    //tabId.push(id.substr(i, 1))
+                    tabId = id.split(":");
+                    //}
+                    let x1 = tabId[0]
+                    let y1 = tabId[1]
+                    info = Tablica[x1][y1] //pobieranie wartosci tablicy z TD
+                    //console.log("info " + info); -- zawartosc komorki
+                    //console.log("x1: " + x1); //-- pozycja X
+                    //console.log("y1: " + y1); //-- pozycja Y
+                    if (info == 9) { //info - wartosc tablicy czyli 0-9
+                        obrazek.setAttribute("src", "./imgz4/bomb.PNG")
+
+                        for (let i = 0; i < cols; i++) { // petla sprawdza i zamienia wszystkie ukryte na bomby
+                            for (let j = 0; j < rows; j++) {
+                                if (Tablica[i][j] == 9) {
+                                    komorka = document.getElementById(`${i}a:${j}a`) //pobieranie wartosci td z tablicy
+                                    komorka.setAttribute("src", "./imgz4/bomb.PNG") //zmieniam atrybut komorki szukajac jej po id
+                                }
+                            }
+                        }
+                        console.log("komorka: " + komorka);
+                        PobierzDate2()
+                        alert(`Przegrales, twoja gra trwala: ${s2}s`)
+                    } else
+                        odkrywanie(x1, y1)
+                }
+
+                punkt.oncontextmenu = function (event) {
+                    if (i < 5) {
+                        event.preventDefault();
+                        obrazek.setAttribute("src", "./imgz4/flaga.PNG")
+                        i++
+                    }
+
+                }
+            }
+            Plansza.appendChild(rzad)
+        }
+        Drugi.appendChild(Plansza)
+
+        function odkrywanie(x1, y1) { // sprawdzamy czy elementy wokol nie sa bombami, jesli tak, to zamieniamy ich zawartosc komorki na info
+            let i = parseInt(x1)
+            let j = parseInt(y1) // przypisuje pod i & j, zeby nizej dzialalo bo to lekko zmodyfikowany kod z dodawania liczb
+            if (i < rows && j < cols && i >= 0 && j >= 0 && document.getElementById(`${i}:${j}`).innerText == "") {
+                if (Tablica[i][j] != 9) {
+                    odkryte++
+
+                    let wwww = Tablica[i][j] //www to wartosc komorki
+                    let komorka1 = document.getElementById(`${i}:${j}`) //pobieranie wartosci td z tablicy
+                    komorka1.innerHTML = wwww //wstawianie do komorki wartosci z tablicy np 0 lub 1
+
+                    // odkrywanie pól dookoła
+                    for (let a = -1; a <= 1; a++) {
+                        for (let b = -1; b <= 1; b++) {
+                            console.log("test")
+                            if (Tablica[i][j] != 0) {
+                                console.log("inne niz zero")
+
+                                let wwww = Tablica[i][j]
+                                let komorka1 = document.getElementById(`${i}:${j}`)
+                                komorka1.innerHTML = wwww
+                            } else {
+                                odkrywanie(i + a, j + b)
+                            }
+                        }
+                    }
+
+                    czyWygrana()
+                }
+            }
+        }
+
+        function czyWygrana() {
+            if (wolne == odkryte) {
+                PobierzDate2()
+                alert(`${nick}, wygrales w ${s2}s`)
+            }
+        }
+    }
+</script>
+
+</html>
