@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Maciej Welpa">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .main {
+            margin: auto;
+            padding: 4px;
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+        }
+
+        .table {
+            height: 90px;
+            width: 90px;
+            border: 1px solid black;
+            padding: 4px;
+        }
+
+        td {
+            height: 20px;
+            width: 20px;
+            border: 1px solid black;
+        }
+
+        td:hover {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+
+        #winningDiv {
+            background-color: greenyellow;
+            border: 1px solid black;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        #draftDiv {
+            background-color: yellow;
+            border: 1px solid black;
+            margin-top: 20px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body id="body">
+    <script defer>
+        //body
+        body = document.getElementById("body")
+        HeadingCreating()
+        MainDefining()
+        TableRender()
+
+        //headings
+        function HeadingCreating() {
+            let title = document.createElement("h1")
+            title.innerText = "Tic Tac Toe Game"
+            body.appendChild(title)
+
+            currentMove = document.createElement("h2")
+            currentMove.innerText = `Current player: ` //add current player
+            body.appendChild(currentMove)
+        }
+
+
+        //main
+        function MainDefining() {
+            main = document.createElement("div")
+            body.appendChild(main)
+            main.id = "main"
+            main.setAttribute("class", "main")
+        }
+
+        //table
+        function TableRender() {
+            table = document.createElement("table")
+            table.setAttribute("class", "table")
+            for (let i = 0; i < 3; i++) {
+                var tr = document.createElement("tr")
+                for (let j = 0; j < 3; j++) {
+                    let td = document.createElement("td")
+                    switch (i) {
+                        case 0:
+                            td.setAttribute("id", `${j}`)
+                            break;
+                        case 1:
+                            td.setAttribute("id", `${i + j + 2}`)
+                            break;
+                        case 2:
+                            td.setAttribute("id", `${i + j + 4}`)
+                            break;
+                    }
+                    tr.append(td)
+                }
+                table.append(tr)
+            }
+            main.appendChild(table)
+        }
+
+        // Logic
+        currentPlayer = "X"
+        QueueX = []
+        QueueY = []
+        move = 0
+        winArray = [
+            [0, 1, 2],
+            [0, 3, 6],
+            [0, 4, 8],
+            [3, 4, 5],
+            [1, 4, 7],
+            [2, 5, 8],
+            [6, 7, 8],
+            [2, 4, 6],
+        ]
+        checker = (arr, target) => target.every(v => arr.includes(v));
+
+        function WhichPlayer(CellId) {
+            (move % 2 == 0) ? currentPlayer = "X" : currentPlayer = "O";
+            (move % 2 == 0) ? QueueY.push(parseInt(CellId)) : QueueX.push(parseInt(CellId));
+            QueueX.sort()
+            QueueY.sort()
+            IsWin();
+            IsDraft();
+            currentPlayerHandler(currentPlayer)
+        }
+
+        function currentPlayerHandler(currentPlayer) {
+            currentMove.innerText = `Now it's ${currentPlayer}'s move!`
+        }
+
+        function IsDraft() {
+            if (move == 8) {
+                Draft()
+                DisableClicking()
+            }
+        }
+
+        function IsWin() {
+            for (let i = 0; i < winArray.length; i++) {
+                if (checker(QueueX, winArray[i])) {
+                    WinDisplay("X")
+                    DisableClicking()
+                    currentMove.remove()
+                } else if (checker(QueueY, winArray[i])) {
+                    WinDisplay("O")
+                    DisableClicking()
+                    currentMove.remove()
+                }
+            }
+        }
+
+        function DisableClicking() {
+            document.addEventListener("click", handler, true);
+
+            function handler(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }
+
+        function WinDisplay(currentPlayer) {
+            winningDiv = document.createElement("div")
+            winningDiv.id = "winningDiv"
+            winningDiv.innerText = `Player ${currentPlayer} won!`
+            main.appendChild(winningDiv)
+        }
+
+        function Draft() {
+            draftDiv = document.createElement("div")
+            draftDiv.id = "draftDiv"
+            draftDiv.innerText = `Draft!`
+            main.appendChild(draftDiv)
+        }
+
+        const tableCells = document.getElementsByTagName("td")
+
+        const cellPressed = e => {
+            let selectedCell = e.target
+            let CellId = selectedCell.id
+            if (!selectedCell.innerText) {
+                selectedCell.innerText = currentPlayer
+                move += 1;
+                WhichPlayer(CellId)
+            }
+        }
+
+        for (let cell of tableCells) {
+            cell.addEventListener("click", cellPressed)
+        }
+    </script>
+</body>
+
+</html>
