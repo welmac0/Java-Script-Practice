@@ -133,8 +133,10 @@
             QueueX.sort()
             QueueY.sort()
             IsWin();
-            IsDraft();
             currentPlayerHandler(currentPlayer)
+            if (win = 0) {
+                IsDraft()
+            }
         }
 
         function currentPlayerHandler(currentPlayer) {
@@ -142,7 +144,7 @@
         }
 
         function IsDraft() {
-            if (move == 8) {
+            if (move == 9) {
                 Draft()
                 DisableClicking()
             }
@@ -158,6 +160,8 @@
                     WinDisplay("O")
                     DisableClicking()
                     currentMove.remove()
+                } else {
+                    win = 0;
                 }
             }
         }
